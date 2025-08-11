@@ -1,35 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Success</title>
+    <title>Message Sent</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background: #f9f9f9;
+            background: #f5f5f5;
         }
-        .success-message {
-            max-width: 500px;
+        .success-container {
+            max-width: 600px;
             margin: 0 auto;
             background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
         .success-icon {
-            color: #4CAF50;
+            color: #2ecc71;
             font-size: 50px;
             margin-bottom: 20px;
+        }
+        .success-title {
+            color: #2c3e50;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="success-message">
+    <div class="success-container">
         <div class="success-icon">✓</div>
-        <h2>Thank You!</h2>
+        <h2 class="success-title">Thank You!</h2>
         <p>Your message has been sent successfully.</p>
         <p>We'll get back to you soon.</p>
     </div>

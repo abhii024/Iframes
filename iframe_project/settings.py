@@ -126,10 +126,32 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
 
+# For iframe embedding
+X_FRAME_OPTIONS = 'ALLOW-FROM *'
+
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
     'http://127.0.0.1',
     'https://your-parent-site.com',
 ]
 
-X_FRAME_OPTIONS = 'ALLOW-FROM *'
+# Email settings
+
+
+
+# Looking to send emails in production? Check out our Email API/SMTP product!
+# settings.py
+CONTACT_EMAIL = 'abhi.w3web@gmail.com'  # Your receiving email
+DEFAULT_FROM_EMAIL = 'webmaster@localhost'  # From address
+
+# Mailtrap configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = '20ae7075014d7d'
+EMAIL_HOST_PASSWORD = 'eba74f5385a748'
+EMAIL_PORT = 2525
+EMAIL_USE_TLS = True
+
+SEND_USER_CONFIRMATION = True  # Set to False to disable auto-replies
+SITE_NAME = "Your Site Name"
+

@@ -16,11 +16,21 @@ Including another URLconf
 """
 # iframe_project/urls.py
 from django.contrib import admin
+# from django.urls import path
+# from iframe_form import views
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('contact/', views.contact_form, name='contact_form'),
+#     path('contact/success/', views.success_view, name='success'),
+# ]
+# iframe_project/urls.py
 from django.urls import path
 from iframe_form import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('contact/', views.contact_form, name='contact_form'),
-    path('contact/success/', views.success_view, name='success'),
+    path('contact/success/', views.contact_success, name='contact_success'),
+    path('contact/iframe/', views.contact_iframe, name='contact_iframe')
 ]

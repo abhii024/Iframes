@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 0;
+            margin: 0;
+        }
+        
+        /* Form Container */
+        .form-iframe-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Form Styles */
+        .dynamic-form {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+        
+        .form-title {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        select.form-control {
+            height: 46px;
+            background-color: white;
+        }
+        
+        /* Checkbox Styles */
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .form-check-input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .form-check-label {
+            font-weight: normal;
+        }
+        
+        /* Button Styles */
+        .submit-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        
+        .submit-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Error Styles */
+        .errorlist {
+            color: #e74c3c;
+            margin-top: 5px;
+            list-style: none;
+            font-size: 14px;
+        }
+        
+        /* Success Message Styles */
+        .success-message {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .success-icon {
+            color: #2ecc71;
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+        
+        .success-title {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 480px) {
+            .form-iframe-container {
+                padding: 10px;
+            }
+            
+            .dynamic-form {
+                padding: 15px;
+            }
+            
+            .form-title {
+                font-size: 20px;
+            }
+            
+            .form-control {
+                padding: 10px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-iframe-container">
+        {% if not form_submitted %}
+        <div class="dynamic-form">
+            <!-- <h2 class="form-title">{{ form_title|default:"Contact Us" }}</h2> -->
+            <form method="post" id="dynamicForm">
+                {% csrf_token %}
+                
+                <h2>{{ title }}</h2>
+                
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="error">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        {% else %}
+        <div class="success-message">
+            <div class="success-icon">✓</div>
+            <h3 class="success-title">Thank You!</h3>
+            <p>Your form has been submitted successfully.</p>
+            <p>We'll get back to you soon.</p>
+        </div>
+        {% endif %}
+    </div>
+
+            
+        <script>
+        document.getElementById('dynamicForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {
+                    'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'include'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect_url;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit';
+                
+                if (error.errors) {
+                    // Clear previous errors
+                    document.querySelectorAll('.error').forEach(el => el.remove());
+                    
+                    // Display new errors
+                    for (const field in error.errors) {
+                        const fieldElement = form.querySelector(`[name="${field}"]`);
+                        if (fieldElement) {
+                            const errorDiv = document.createElement('div');
+                            errorDiv.className = 'error';
+                            errorDiv.textContent = error.errors[field].map(e => e.message).join(', ');
+                            fieldElement.parentNode.appendChild(errorDiv);
+                        }
+                    }
+                } else {
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        });
+        </script>
+</body>
+</html>
