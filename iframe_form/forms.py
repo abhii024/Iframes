@@ -3,6 +3,8 @@ from django import forms
 from .models import ContactSubmission
 
 class ContactForm(forms.ModelForm):
+    organization_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    
     class Meta:
         model = ContactSubmission
         fields = ['name', 'email', 'subject', 'message']
