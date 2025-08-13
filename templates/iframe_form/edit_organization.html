@@ -42,14 +42,36 @@
                     </svg>
                     Form Fields
                 </label>
-                <select name="fields" id="fields" class="form-select" multiple>
-                    {% for field in available_fields %}
-                        <option value="{{ field }}" {% if field in selected_fields %}selected{% endif %}>
-                            {{ field|title }}
-                        </option>
-                    {% endfor %}
-                </select>
-                <div class="form-hint">Select multiple with Ctrl/Cmd</div>
+                
+                <div class="field-select-container">
+                    <select name="fields" id="fields" class="form-select" multiple style="display: none;">
+                        {% for field in available_fields %}
+                            <option value="{{ field }}" {% if field in selected_fields %}selected{% endif %}>
+                                {{ field|title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    
+                    <div class="chips-container" id="chips-container">
+                        {% for field in selected_fields %}
+                            <div class="chip" data-value="{{ field }}">
+                                {{ field|title }}
+                                <span class="chip-remove">&times;</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="field-dropdown">
+                        <input type="text" id="field-search" placeholder="Search or select fields..." class="form-select">
+                        <div class="field-options" id="field-options">
+                            {% for field in available_fields %}
+                                <div class="field-option {% if field in selected_fields %}selected{% endif %}" data-value="{{ field }}">
+                                    {{ field|title }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- CSS Editor -->
@@ -74,8 +96,101 @@
 </div>
 
 <script>
-    document.getElementById('organization').addEventListener('change', function() {
-        this.form.submit();
+    document.addEventListener('DOMContentLoaded', function() {
+        // Organization select change handler
+        document.getElementById('organization').addEventListener('change', function() {
+            this.form.submit();
+        });
+
+        // Field selection functionality
+        const fieldSelect = document.getElementById('fields');
+        const chipsContainer = document.getElementById('chips-container');
+        const fieldSearch = document.getElementById('field-search');
+        const fieldOptions = document.getElementById('field-options');
+        
+        // Initialize selected fields from hidden select
+        function updateChips() {
+            chipsContainer.innerHTML = '';
+            Array.from(fieldSelect.selectedOptions).forEach(option => {
+                addChip(option.value, option.text);
+            });
+        }
+        
+        // Add a chip
+        function addChip(value, text) {
+            const chip = document.createElement('div');
+            chip.className = 'chip';
+            chip.dataset.value = value;
+            chip.innerHTML = `${text}<span class="chip-remove">&times;</span>`;
+            chipsContainer.appendChild(chip);
+            
+            // Add remove handler
+            chip.querySelector('.chip-remove').addEventListener('click', function(e) {
+                e.stopPropagation();
+                removeChip(value);
+            });
+        }
+        
+        // Remove a chip
+        function removeChip(value) {
+            // Remove from select
+            const option = Array.from(fieldSelect.options).find(opt => opt.value === value);
+            if (option) option.selected = false;
+            
+            // Remove chip
+            const chip = chipsContainer.querySelector(`.chip[data-value="${value}"]`);
+            if (chip) chip.remove();
+            
+            // Update options display
+            updateOptionDisplay();
+        }
+        
+        // Update options display (mark selected/unselected)
+        function updateOptionDisplay() {
+            const selectedValues = Array.from(fieldSelect.selectedOptions).map(opt => opt.value);
+            document.querySelectorAll('.field-option').forEach(option => {
+                if (selectedValues.includes(option.dataset.value)) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+        }
+        
+        // Field search functionality
+        fieldSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('.field-option').forEach(option => {
+                const text = option.textContent.toLowerCase();
+                option.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
+        
+        // Field option click handler
+        document.querySelectorAll('.field-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const value = this.dataset.value;
+                const text = this.textContent;
+                
+                // Toggle selection
+                const selectedOption = Array.from(fieldSelect.options).find(opt => opt.value === value);
+                if (selectedOption) {
+                    if (selectedOption.selected) {
+                        selectedOption.selected = false;
+                        const chip = chipsContainer.querySelector(`.chip[data-value="${value}"]`);
+                        if (chip) chip.remove();
+                    } else {
+                        selectedOption.selected = true;
+                        addChip(value, text);
+                    }
+                    updateOptionDisplay();
+                }
+            });
+        });
+        
+        // Initialize
+        updateChips();
+        updateOptionDisplay();
     });
 </script>
 
@@ -86,6 +201,8 @@
         --border: #e0e0e0;
         --text: #333;
         --text-light: #666;
+        --chip-bg: #e0e0e0;
+        --chip-hover: #d0d0d0;
     }
 
     body {
@@ -142,11 +259,96 @@
         box-shadow: 0 0 0 2px var(--primary-light);
     }
 
-    .form-select[multiple] {
-        min-height: 120px;
-        padding: 0.5rem;
+    /* Field selection styles */
+    .field-select-container {
+        position: relative;
     }
 
+    .chips-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+        min-height: 42px;
+        align-items: center;
+    }
+
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        background-color: var(--chip-bg);
+        padding: 0.25rem 0.75rem;
+        border-radius: 16px;
+        font-size: 0.875rem;
+        cursor: default;
+        transition: background-color 0.2s;
+    }
+
+    .chip:hover {
+        background-color: var(--chip-hover);
+    }
+
+    .chip-remove {
+        margin-left: 0.5rem;
+        cursor: pointer;
+        font-size: 1rem;
+        line-height: 1;
+    }
+
+    .chip-remove:hover {
+        color: var(--primary);
+    }
+
+    .field-dropdown {
+        position: relative;
+    }
+
+    .field-options {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        max-height: 200px;
+        overflow-y: auto;
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 0 0 8px 8px;
+        border-top: none;
+        z-index: 10;
+        display: none;
+    }
+
+    .field-options.show {
+        display: block;
+    }
+
+    .field-option {
+        padding: 0.75rem;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .field-option:hover {
+        background-color: var(--primary-light);
+    }
+
+    .field-option.selected {
+        background-color: var(--primary-light);
+        color: var(--primary);
+    }
+
+    .field-option.selected::after {
+        content: "✓";
+        margin-left: 0.5rem;
+        float: right;
+    }
+
+    #field-search:focus + .field-options,
+    .field-options:hover {
+        display: block;
+    }
+
+    /* Other existing styles */
     .form-hint {
         font-size: 0.875rem;
         color: var(--text-light);
