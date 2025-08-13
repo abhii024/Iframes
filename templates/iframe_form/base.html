@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>{% block title %}Form{% endblock %}</title>
@@ -8,4 +8,60 @@
 <body>
     {% block content %}{% endblock %}
 </body>
-</html> 
+</html>  -->
+
+
+
+
+
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>Edit Organization</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Select Organization -->
+        <div class="form-group">
+            <label for="organization">Select Organization:</label>
+            <select name="organization" id="organization" class="form-control" required>
+                <option value="">-- Select Organization --</option>
+                {% for org in organizations %}
+                    <option value="{{ org.id }}" {% if selected_org and selected_org.id == org.id %}selected{% endif %}>
+                        {{ org.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Select Fields -->
+        {% if selected_org %}
+        <div class="form-group">
+            <label for="fields">Select Fields:</label>
+            <select name="fields" id="fields" class="form-control" multiple>
+                {% for field in available_fields %}
+                    <option value="{{ field }}" {% if field in selected_fields %}selected{% endif %}>{{ field }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Add CSS -->
+        <div class="form-group">
+            <label for="form_style">Custom CSS:</label>
+            <textarea name="form_style" id="form_style" class="form-control" rows="5">{{ selected_org.form_style }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        {% endif %}
+    </form>
+</div>
+
+<script>
+    // Auto-submit form when organization changes
+    document.getElementById('organization').addEventListener('change', function () {
+        this.form.submit();
+    });
+</script>
+{% endblock %}

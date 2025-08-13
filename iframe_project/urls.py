@@ -32,5 +32,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('contact/', views.contact_form, name='contact_form'),
     path('contact/success/', views.contact_success, name='contact_success'),
-    path('contact/iframe/', views.contact_iframe, name='contact_iframe')
+    path('contact/iframe/', views.contact_iframe, name='contact_iframe'),
+    path("edit-organization/", views.edit_organization, name="edit_organization"),
+    
 ]

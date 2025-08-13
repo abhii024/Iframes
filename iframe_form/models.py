@@ -1,10 +1,13 @@
 # iframe_form/models.py
 from django.db import models
+from django.contrib.postgres.fields import ArrayField  # If using PostgreSQL
+import json
 
 class Organization(models.Model):
     name = models.CharField(max_length=100)
-    form_style = models.TextField(default='')  # CSS styles for the form
-    
+    form_style = models.TextField(default='', blank=True)
+    fields = models.JSONField(default=list, blank=True)  # ✅ works without PostgreSQL
+
     def __str__(self):
         return self.name
 

@@ -1,10 +1,15 @@
-# iframe_form/admin.py
+# admin.py
 from django.contrib import admin
-from .models import ContactSubmission
+from .models import Organization
 
-@admin.register(ContactSubmission)
-class ContactSubmissionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'subject', 'created_at', 'ip_address')
-    search_fields = ('name', 'email', 'subject')
-    list_filter = ('created_at',)
-    readonly_fields = ('created_at', 'ip_address')
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    fields = ('name', 'form_style', 'fields')
+    filter_horizontal = ()
+    
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.name == 'fields':
+            kwargs['widget'] = admin.widgets.AdminTextareaWidget()  # Textarea to type JSON or list
+        return super().formfield_for_dbfield(db_field, **kwargs)
+
+admin.site.register(Organization, OrganizationAdmin)
