@@ -46,6 +46,41 @@ def contact_form(request):
             submission.save()
             
             # Email sending logic remains the same...
+            try:
+                email = EmailMessage(
+                    subject=f"New Contact Form Submission: {submission.subject}",
+                    body=f"""
+                    <html>
+                    <body style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 0 auto;">
+                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px;">
+                            <h2 style="color: #2c3e50;">New Contact Form Submission</h2>
+                            
+                            <div style="margin: 20px 0; padding: 15px; background-color: white; border-radius: 5px;">
+                                <p><strong>From:</strong> {submission.name} &lt;{submission.email}&gt;</p>
+                                <p><strong>Subject:</strong> {submission.subject}</p>
+                                <p><strong>Message:</strong></p>
+                                <div style="padding: 10px; border: 1px solid #eee; border-radius: 3px; margin-top: 5px;">
+                                    {submission.message}
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 20px; font-size: 0.9em; color: #7f8c8d;">
+                                <p>You can reply directly to this email to respond to {submission.name.split()[0]}.</p>
+                                <p>This message was sent via your website contact form.</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                    """,
+                    to=[submission.email],  # Send to user's email
+                    from_email='abhi.w3web@gmail.com',  # Your email address
+                    reply_to=[submission.email],
+                )
+                email.content_subtype = "html"  # Set content type to HTML
+                email.send()
+            except Exception as e:
+                # Optionally log the error or handle it as needed
+                print(f"Error sending email: {e}")
             return redirect('contact_success')
         
         # Form is invalid - show errors

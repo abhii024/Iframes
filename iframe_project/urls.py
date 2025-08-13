@@ -15,7 +15,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 # iframe_project/urls.py
-from django.contrib import admin
 # from django.urls import path
 # from iframe_form import views
 
@@ -27,6 +26,7 @@ from django.contrib import admin
 # iframe_project/urls.py
 from django.urls import path
 from iframe_form import views
+from django.contrib import admin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
