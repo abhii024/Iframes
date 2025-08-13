@@ -7,6 +7,9 @@ from .models import ContactSubmission, Organization
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.http import HttpResponse
+
+from django.views.decorators.http import require_http_methods
+from django.contrib import messages
 # Create default organizations if they don't exist
 def create_default_organizations():
     if not Organization.objects.filter(id=1).exists():
@@ -30,6 +33,7 @@ def create_default_organizations():
 
 @xframe_options_exempt
 @csrf_exempt
+@require_http_methods(["GET", "POST"]) 
 def contact_form(request):
     org_id = request.GET.get('org_id')
     if not org_id:
@@ -43,7 +47,9 @@ def contact_form(request):
             submission = form.save(commit=False)
             submission.organization = organization
             submission.save()
-            return HttpResponse("Form submitted successfully!")
+            return render(request, "iframe_form/success.html", {
+                "organization": organization
+            })
     else:
         form = ContactForm(selected_fields=organization.fields)
 
