@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-an06c8(p05u^d^^fi!83%+3jx*eo#g7cc)g503%cx_^h5j=qe+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'iframe_form',
+    'hcaptcha',
+    
 ]
 
 MIDDLEWARE = [
@@ -135,6 +137,13 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
     'http://127.0.0.1',
     'https://your-parent-site.com',
+    'https://ab07b11d82ac.ngrok-free.app',
+]
+# settings.py
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'ab07b11d82ac.ngrok-free.app',  # Your current Ngrok URL
 ]
 
 # Email settings
@@ -156,4 +165,6 @@ EMAIL_USE_TLS = True
 
 SEND_USER_CONFIRMATION = True  # Set to False to disable auto-replies
 SITE_NAME = "Your Site Name"
+HCAPTCHA_SITEKEY = '7f08bd34-4442-49c2-9894-f628888e2932'  # Get from hCaptcha.com
+HCAPTCHA_SECRET = 'your-secret-key'
 

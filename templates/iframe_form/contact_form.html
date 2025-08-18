@@ -1,17 +1,152 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 <head>
     <title>{{ organization.name }} Form</title>
     <style>
-    {{ custom_css|safe }}
+    /* Default CSS - will be overridden by custom_css if present */
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    h1 {
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    form {
+        background: #f9f9f9;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-field {
+        margin-bottom: 20px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    
+    label.required:after {
+        content: " *";
+        color: #e74c3c;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+    
+    .form-control.error {
+        border-color: #e74c3c;
+    }
+    
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+    
+    button[type="submit"] {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    
+    button[type="submit"]:hover {
+        background: #2980b9;
+    }
+    
+    .error {
+        color: #e74c3c;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+    
+    .error-message {
+        color: #e74c3c;
+        margin: 20px 0;
+        padding: 15px;
+        border: 1px solid #e74c3c;
+        background-color: #fadbd8;
+        border-radius: 4px;
+    }
+    
+    /* Hide hCaptcha badge */
+    .h-captcha {
+        margin-bottom: 20px;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+        body {
+            padding: 10px;
+        }
+        
+        form {
+            padding: 20px;
+        }
+    }
+    
+    /* Custom CSS - will override default styles if present */
+    {% if custom_css %}{{ custom_css|safe }}{% endif %}
     </style>
+    <!-- Load ONLY hCaptcha API -->
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 </head>
 <body>
     <h1>{{ organization.name }} Contact Form</h1>
-    {% if form.fields|length > 1 %}  {# Checking if more than just organization_id exists #}
-        <form method="POST">
+    
+    {% if captcha_error %}
+        <div class="error-message">
+            {{ captcha_error }}
+        </div>
+    {% endif %}
+
+    {% if form.fields|length > 1 %}
+        <form method="POST" id="contactForm">
             {% csrf_token %}
-            {{ form.as_p }}
+            <!-- Render form fields -->
+            {% for field in form %}
+                {% if field.name != 'captcha' and field.name != 'organization_id' %}
+                    <div class="form-field">
+                        <label for="{{ field.id_for_label }}" class="{% if field.field.required %}required{% endif %}">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="error">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            
+         
+            
+            <!-- hCaptcha field -->
+          <div class="h-captcha" data-sitekey="{{ HCAPTCHA_SITEKEY }}"></div>
+            {% if captcha_error %}
+                <div class="error">{{ captcha_error }}</div>
+            {% endif %}
+  
+            
             <button type="submit">Submit</button>
         </form>
     {% else %}
