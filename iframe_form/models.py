@@ -1,13 +1,27 @@
-# iframe_form/models.py
 from django.db import models
-from django.contrib.postgres.fields import ArrayField  # If using PostgreSQL
-import json
-from django.contrib.postgres.fields import JSONField  # For Django < 3.1
-from django.db.models import JSONField  
+from django.db.models import JSONField
+
 class Organization(models.Model):
+    FIELD_TYPES = (
+        ('text', 'Text'),
+        ('email', 'Email'),
+        ('number', 'Number'),
+        ('phone', 'Phone'),
+        ('textarea', 'Text Area'),
+        ('select', 'Select Dropdown'),
+        ('multiselect', 'Multi Select Dropdown'),
+        ('radio', 'Radio Buttons'),
+        ('checkbox', 'Checkbox'),
+        ('multicheckbox', 'Multi Checkbox'),
+        ('date', 'Date'),
+        ('time', 'Time'),
+        ('url', 'Website URL'),
+        ('html', 'HTML Content'),
+        ('consent', 'Consent Checkbox'),
+    )
+    
     name = models.CharField(max_length=255)
-    fields = models.JSONField(default=list)  # Stores all selected fields
-    required_fields = models.JSONField(default=list)  # Stores only required fields
+    form_fields = JSONField(default=list)  # Stores field configurations
     form_style = models.TextField(blank=True)  # Custom CSS
     
     def __str__(self):
@@ -15,14 +29,9 @@ class Organization(models.Model):
 
 class ContactSubmission(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    subject = models.CharField(max_length=200)
-    phone = models.CharField(max_length=20, blank=True, null=True)
-    message = models.TextField()
+    form_data = JSONField(default=dict)  # Store all submitted data
     ip_address = models.GenericIPAddressField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    additional_data = models.JSONField(null=True, blank=True)  # Make this field optional
     
     def __str__(self):
-        return f"{self.name} - {self.subject} ({self.created_at})"
+        return f"{self.organization.name if self.organization else 'Unknown'} - {self.created_at}"

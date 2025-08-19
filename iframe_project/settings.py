@@ -137,13 +137,13 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
     'http://127.0.0.1',
     'https://your-parent-site.com',
-    'https://ab07b11d82ac.ngrok-free.app',
+    'https://86112514cce6.ngrok-free.app',
 ]
 # settings.py
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'ab07b11d82ac.ngrok-free.app',  # Your current Ngrok URL
+    '86112514cce6.ngrok-free.app',  # Your current Ngrok URL
 ]
 
 # Email settings

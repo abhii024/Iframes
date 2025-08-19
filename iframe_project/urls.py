@@ -24,15 +24,25 @@ Including another URLconf
 #     path('contact/success/', views.success_view, name='success'),
 # ]
 # iframe_project/urls.py
+# from django.urls import path
+# from iframe_form import views
+# from django.contrib import admin
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('contact/', views.contact_form, name='contact_form'),
+#     path('contact/success/', views.contact_success, name='contact_success'),
+#     path('contact/iframe/', views.contact_iframe, name='contact_iframe'),
+#     path("edit-organization/", views.edit_organization, name="edit_organization"),
+    
+# ]
 from django.urls import path
 from iframe_form import views
-from django.contrib import admin
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('contact/', views.contact_form, name='contact_form'),
-    path('contact/success/', views.contact_success, name='contact_success'),
-    path('contact/iframe/', views.contact_iframe, name='contact_iframe'),
-    path("edit-organization/", views.edit_organization, name="edit_organization"),
-    
+    path('', views.organization_list, name='organization_list'),
+    path('create/', views.create_organization, name='create_organization'),
+    path('edit/<int:org_id>/', views.edit_organization, name='edit_organization'),
+    path('form/', views.contact_form, name='contact_form'),
+    path('success/', views.contact_success, name='contact_success'),
 ]

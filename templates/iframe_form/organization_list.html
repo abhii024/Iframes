@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Organizations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .org-list {
+            list-style: none;
+            padding: 0;
+        }
+        .org-item {
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .org-actions a {
+            margin-left: 10px;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .edit-btn {
+            background: #3498db;
+            color: white;
+        }
+        .form-btn {
+            background: #2ecc71;
+            color: white;
+        }
+        .create-btn {
+            display: block;
+            text-align: center;
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            margin-top: 20px;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Organizations</h1>
+    
+    {% if organizations %}
+        <ul class="org-list">
+            {% for org in organizations %}
+                <li class="org-item">
+                    <span class="org-name">{{ org.name }}</span>
+                    <div class="org-actions">
+                        <a href="{% url 'edit_organization' org.id %}" class="edit-btn">Edit Form</a>
+                        <a href="{% url 'contact_form' %}?org_id={{ org.id }}" class="form-btn">View Form</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No organizations found. Create your first organization to get started.</p>
+    {% endif %}
+    
+    <a href="{% url 'create_organization' %}" class="create-btn">Create New Organization</a>
+</body>
+</html>

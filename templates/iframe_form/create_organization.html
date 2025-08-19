@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Organization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Create New Organization</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Organization Name</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <button type="submit">Create Organization</button>
+    </form>
+    <p><a href="{% url 'organization_list' %}">Back to Organization List</a></p>
+</body>
+</html>
