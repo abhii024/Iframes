@@ -47,7 +47,7 @@ def contact_form(request):
             if field.get('type') == 'html':
                 html_fields.append(field.get('name'))
     
-    return render(request, "iframe_form/contact_form.html", {
+    return render(request, "iframe_form/show_form.html", {
         "organization": organization,
         "form": form,
         "html_fields": html_fields,

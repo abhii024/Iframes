@@ -166,7 +166,7 @@
                             {% for field_config in organization.form_fields %}
                                 {% if field_config.name == field.name and field_config.type == 'html' %}
                                     <div class="html-content">
-                                        {{ field_config.content|safe }}
+                                        {{ field_config.html|safe }}
                                     </div>
                                 {% endif %}
                             {% endfor %}

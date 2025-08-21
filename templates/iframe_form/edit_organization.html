@@ -379,6 +379,7 @@
             border: 2px dashed var(--primary);
         }
         
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -388,17 +389,17 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
         }
         
         .modal-content {
             background-color: white;
             padding: 20px;
             border-radius: 8px;
-            width: 80%;
             max-width: 600px;
-            max-height: 80%;
+            width: 90%;
+            max-height: 80vh;
             overflow-y: auto;
         }
         
@@ -406,7 +407,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 1px solid var(--border);
         }
@@ -418,26 +419,163 @@
             cursor: pointer;
         }
         
-        .form-link {
-            display: block;
-            margin-top: 15px;
-            padding: 10px;
-            background-color: #e8f4fd;
-            border-radius: 4px;
-            word-break: break-all;
+        /* Form Display Styles */
+        .form-display-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
         
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            background-color: var(--success);
-            color: white;
+        .form-display {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-display h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--primary);
+        }
+        
+        .form-display .form-field {
+            margin-bottom: 20px;
+        }
+        
+        .form-display .form-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-display .form-field input,
+        .form-display .form-field select,
+        .form-display .form-field textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
             border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            display: none;
-            z-index: 1000;
+            font-size: 16px;
+        }
+        
+        .form-display .form-field.required label::after {
+            content: " *";
+            color: var(--danger);
+        }
+        
+        .form-display .checkbox-field,
+        .form-display .radio-field {
+            margin-bottom: 10px;
+        }
+        
+        .form-display .html-content {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .form-display .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto 0;
+            transition: background 0.3s;
+        }
+        
+        .form-display .submit-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .success-message i {
+            font-size: 48px;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+        
+        .success-message h2 {
+            color: var(--success);
+            margin-bottom: 15px;
+        }
+        
+        .submissions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .submissions-table th,
+        .submissions-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .submissions-table th {
+            background-color: var(--light);
+            font-weight: 600;
+        }
+        
+        .submissions-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .view-submission {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .view-submission:hover {
+            background: var(--primary-dark);
+        }
+        
+        .submission-details {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        
+        .submission-details h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .submission-field {
+            margin-bottom: 15px;
+        }
+        
+        .submission-field label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .submission-field .value {
+            padding: 10px;
+            background: var(--light);
+            border-radius: 4px;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -445,8 +583,8 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-edit"></i> Form Editor: <span id="org-name">Organization Name</span></h1>
-            <a href="#" class="back-btn" id="back-btn">
+            <h1><i class="fas fa-edit"></i> Form Editor: {{ organization.name }}</h1>
+            <a href="{% url 'organization_list' %}" class="back-btn" id="back-to-list">
                 <i class="fas fa-arrow-left"></i> Back to Organizations
             </a>
         </header>
@@ -521,10 +659,119 @@
             <div class="editor-panel">
                 <div class="form-preview" id="preview-container">
                     <h3>Form Preview</h3>
-                    <div class="empty-state">
-                        <i class="fas fa-inbox"></i>
-                        <p>Drag and drop fields from the left panel to build your form</p>
-                    </div>
+                    {% if organization.form_fields %}
+                        {% for field in organization.form_fields %}
+                            <div class="preview-field" id="field-{{ forloop.counter }}" data-type="{{ field.type }}">
+                                {% if field.type == 'text' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <label>{{ field.label }}</label>
+                                        <input type="text" placeholder="{{ field.placeholder }}" class="{{ field.css_class }}">
+                                    </div>
+                                {% elif field.type == 'email' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <label>{{ field.label }}</label>
+                                        <input type="email" placeholder="{{ field.placeholder }}" class="{{ field.css_class }}">
+                                    </div>
+                                {% elif field.type == 'number' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <label>{{ field.label }}</label>
+                                        <input type="number" placeholder="{{ field.placeholder }}" class="{{ field.css_class }}">
+                                    </div>
+                                {% elif field.type == 'phone' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <label>{{ field.label }}</label>
+                                        <input type="tel" placeholder="{{ field.placeholder }}" class="{{ field.css_class }}">
+                                    </div>
+                                {% elif field.type == 'textarea' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <label>{{ field.label }}</label>
+                                        <textarea placeholder="{{ field.placeholder }}" class="{{ field.css_class }}"></textarea>
+                                    </div>
+                                {% elif field.type == 'select' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <label>{{ field.label }}</label>
+                                        <select class="{{ field.css_class }}">
+                                            <option value="">Select an option</option>
+                                            {% for option in field.options %}
+                                                <option value="{{ option }}">{{ option }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                {% elif field.type == 'multiselect' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <label>{{ field.label }}</label>
+                                        <select multiple class="{{ field.css_class }}">
+                                            {% for option in field.options %}
+                                                <option value="{{ option }}">{{ option }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                {% elif field.type == 'radio' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <label>{{ field.label }}</label>
+                                        {% for option in field.options %}
+                                            <div class="radio-field">
+                                                <input type="radio" name="{{ field.name }}" value="{{ option }}">
+                                                <label>{{ option }}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% elif field.type == 'checkbox' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <div class="checkbox-field">
+                                            <input type="checkbox" name="{{ field.name }}">
+                                            <label>{{ field.label }}</label>
+                                        </div>
+                                    </div>
+                                {% elif field.type == 'multicheckbox' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <label>{{ field.label }}</label>
+                                        {% for option in field.options %}
+                                            <div class="checkbox-field">
+                                                <input type="checkbox" name="{{ field.name }}[]" value="{{ option }}">
+                                                <label>{{ option }}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% elif field.type == 'date' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <label>{{ field.label }}</label>
+                                        <input type="date" class="{{ field.css_class }}">
+                                    </div>
+                                {% elif field.type == 'time' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <label>{{ field.label }}</label>
+                                        <input type="time" class="{{ field.css_class }}">
+                                    </div>
+                                {% elif field.type == 'url' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <label>{{ field.label }}</label>
+                                        <input type="url" placeholder="{{ field.placeholder }}" class="{{ field.css_class }}">
+                                    </div>
+                                {% elif field.type == 'html' %}
+                                    <div class="form-field html-content {{ field.css_class }}">
+                                        {{ field.html|safe }}
+                                    </div>
+                                {% elif field.type == 'consent' %}
+                                    <div class="form-field {% if field.required %}required{% endif %}">
+                                        <div class="checkbox-field">
+                                            <input type="checkbox" name="{{ field.name }}">
+                                            <label>{{ field.label }}</label>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="field-actions">
+                                    <button class="edit-field" title="Edit"><i class="fas fa-edit"></i></button>
+                                    <button class="remove-field" title="Remove"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Drag and drop fields from the left panel to build your form</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             
@@ -541,8 +788,8 @@
             <button class="btn btn-secondary" id="preview-btn">
                 <i class="fas fa-eye"></i> Preview Form
             </button>
-            <button class="btn btn-secondary" id="css-btn">
-                <i class="fas fa-code"></i> Edit CSS
+            <button class="btn btn-secondary" id="view-submissions-btn">
+                <i class="fas fa-database"></i> View Submissions
             </button>
             <button class="btn btn-primary" id="save-btn">
                 <i class="fas fa-save"></i> Save Form
@@ -550,132 +797,80 @@
         </div>
     </div>
 
-    <!-- CSS Editor Modal -->
-    <div class="modal" id="css-modal">
+    <!-- Preview Modal -->
+    <div class="modal" id="preview-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Edit Form CSS</h2>
-                <button class="modal-close" id="css-close">&times;</button>
+                <h2>Form Preview</h2>
+                <button class="modal-close">&times;</button>
             </div>
-            <div class="form-group">
-                <label for="custom-css">Custom CSS</label>
-                <textarea id="custom-css" rows="15">body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-h1 {
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-form {
-    background: #f9f9f9;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
-
-.form-field {
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-label.required:after {
-    content: " *";
-    color: #e74c3c;
-}
-
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-    box-sizing: border-box;
-}</textarea>
-            </div>
-            <button class="btn btn-primary" id="save-css">Save CSS</button>
+            <div id="preview-form-container"></div>
         </div>
     </div>
 
-    <!-- Success Modal -->
-    <div class="modal" id="success-modal">
+    <!-- Submissions Modal -->
+    <div class="modal" id="submissions-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Form Saved Successfully!</h2>
-                <button class="modal-close" id="success-close">&times;</button>
+                <h2>Form Submissions</h2>
+                <button class="modal-close">&times;</button>
             </div>
-            <p>Your form has been saved successfully. You can now view it using the link below:</p>
-            <a href="http://127.0.0.1:8000/form/?org_id=2" class="form-link" id="form-link" target="_blank">
-                http://127.0.0.1:8000/form/?org_id=2
-            </a>
-            <div style="margin-top: 20px; display: flex; gap: 10px;">
-                <button class="btn btn-secondary" id="copy-link">
-                    <i class="fas fa-copy"></i> Copy Link
-                </button>
-                <button class="btn btn-primary" id="view-form">
-                    <i class="fas fa-external-link-alt"></i> View Form
-                </button>
-            </div>
+            <div id="submissions-container"></div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        <i class="fas fa-check-circle"></i> <span id="toast-message"></span>
+    <!-- Submission Details Modal -->
+    <div class="modal" id="submission-details-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Submission Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="submission-details-container"></div>
+        </div>
     </div>
+
+    <form id="save-form" method="POST" action="{% url 'edit_organization' organization.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="form_fields" id="form-fields-input">
+        <input type="hidden" name="form_style" id="form-style-input" value="{{ organization.form_style }}">
+    </form>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const fieldTypes = document.querySelectorAll('.field-type');
             const previewContainer = document.getElementById('preview-container');
             const propertiesContainer = document.getElementById('properties-container');
-            const orgNameElement = document.getElementById('org-name');
-            const backBtn = document.getElementById('back-btn');
-            const cssModal = document.getElementById('css-modal');
-            const cssClose = document.getElementById('css-close');
-            const cssBtn = document.getElementById('css-btn');
-            const saveCssBtn = document.getElementById('save-css');
-            const successModal = document.getElementById('success-modal');
-            const successClose = document.getElementById('success-close');
-            const saveBtn = document.getElementById('save-btn');
-            const previewBtn = document.getElementById('preview-btn');
-            const formLink = document.getElementById('form-link');
-            const copyLinkBtn = document.getElementById('copy-link');
-            const viewFormBtn = document.getElementById('view-form');
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toast-message');
+            const previewModal = document.getElementById('preview-modal');
+            const previewFormContainer = document.getElementById('preview-form-container');
+            const submissionsModal = document.getElementById('submissions-modal');
+            const submissionsContainer = document.getElementById('submissions-container');
+            const submissionDetailsModal = document.getElementById('submission-details-modal');
+            const submissionDetailsContainer = document.getElementById('submission-details-container');
+            const modalCloseButtons = document.querySelectorAll('.modal-close');
+            const formFieldsInput = document.getElementById('form-fields-input');
+            const saveForm = document.getElementById('save-form');
             
             let currentField = null;
-            let fieldCounter = 1;
+            let fieldCounter = {{ organization.form_fields|length|default:0 }} + 1;
             let fieldsData = {};
-            let customCss = '';
-            let orgId = 2; // Default organization ID
-            let orgName = "Organization Name"; // Default organization name
             
-            // Get organization ID from URL if available
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('org_id')) {
-                orgId = urlParams.get('org_id');
-            }
-            if (urlParams.has('org_name')) {
-                orgName = decodeURIComponent(urlParams.get('org_name'));
-                orgNameElement.textContent = orgName;
-            }
-            
-            // Set back button URL
-            backBtn.href = `organization_list.html?org_id=${orgId}&org_name=${encodeURIComponent(orgName)}`;
+            // Initialize fields data from existing form fields
+            {% if organization.form_fields %}
+                {% for field in organization.form_fields %}
+                    fieldsData['field-{{ forloop.counter }}'] = {
+                        type: '{{ field.type }}',
+                        label: '{{ field.label|escapejs }}',
+                        name: '{{ field.name|escapejs }}',
+                        required: {% if field.required %}true{% else %}false{% endif %},
+                        placeholder: '{{ field.placeholder|escapejs }}',
+                        css_class: '{{ field.css_class|escapejs }}',
+                        maxlength: '{{ field.maxlength|escapejs }}',
+                        options: {{ field.options|safe }},
+                        html: `{{ field.html|safe|escapejs }}`
+                    };
+                {% endfor %}
+            {% endif %}
             
             // Field templates for preview
             const fieldTemplates = {
@@ -757,6 +952,124 @@ label.required:after {
                         </div>
                     </div>
                 `,
+                select: `
+                    <div class="property-group">
+                        <h3>Basic Properties</h3>
+                        <div class="form-group">
+                            <label for="field-label">Label</label>
+                            <input type="text" id="field-label" value="Dropdown">
+                        </div>
+                        <div class="form-group">
+                            <label for="field-name">Field Name</label>
+                            <input type="text" id="field-name" value="dropdown">
+                        </div>
+                    </div>
+                    <div class="property-group">
+                        <h3>Options</h3>
+                        <div class="options-list" id="options-container">
+                            <div class="option-item">
+                                <input type="text" placeholder="Option value" value="Option 1">
+                                <button class="remove-option">&times;</button>
+                            </div>
+                            <div class="option-item">
+                                <input type="text" placeholder="Option value" value="Option 2">
+                                <button class="remove-option">&times;</button>
+                            </div>
+                        </div>
+                        <button class="add-option" id="add-option">Add Option</button>
+                    </div>
+                    <div class="property-group">
+                        <h3>Validation</h3>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="field-required"> Required Field</label>
+                        </div>
+                    </div>
+                `,
+                radio: `
+                    <div class="property-group">
+                        <h3>Basic Properties</h3>
+                        <div class="form-group">
+                            <label for="field-label">Label</label>
+                            <input type="text" id="field-label" value="Radio Buttons">
+                        </div>
+                        <div class="form-group">
+                            <label for="field-name">Field Name</label>
+                            <input type="text" id="field-name" value="radio_buttons">
+                        </div>
+                    </div>
+                    <div class="property-group">
+                        <h3>Options</h3>
+                        <div class="options-list" id="options-container">
+                            <div class="option-item">
+                                <input type="text" placeholder="Option value" value="Option 1">
+                                <button class="remove-option">&times;</button>
+                            </div>
+                            <div class="option-item">
+                                <input type="text" placeholder="Option value" value="Option 2">
+                                <button class="remove-option">&times;</button>
+                            </div>
+                        </div>
+                        <button class="add-option" id="add-option">Add Option</button>
+                    </div>
+                    <div class="property-group">
+                        <h3>Validation</h3>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="field-required"> Required Field</label>
+                        </div>
+                    </div>
+                `,
+                checkbox: `
+                    <div class="property-group">
+                        <h3>Basic Properties</h3>
+                        <div class="form-group">
+                            <label for="field-label">Label</label>
+                            <input type="text" id="field-label" value="Checkbox">
+                        </div>
+                        <div class="form-group">
+                            <label for="field-name">Field Name</label>
+                            <input type="text" id="field-name" value="checkbox">
+                        </div>
+                    </div>
+                    <div class="property-group">
+                        <h3>Validation</h3>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="field-required"> Required Field</label>
+                        </div>
+                    </div>
+                `,
+                multicheckbox: `
+                    <div class="property-group">
+                        <h3>Basic Properties</h3>
+                        <div class="form-group">
+                            <label for="field-label">Label</label>
+                            <input type="text" id="field-label" value="Multi Checkbox">
+                        </div>
+                        <div class="form-group">
+                            <label for="field-name">Field Name</label>
+                            <input type="text" id="field-name" value="multi_checkbox">
+                        </div>
+                    </div>
+                    <div class="property-group">
+                        <h3>Options</h3>
+                        <div class="options-list" id="options-container">
+                            <div class="option-item">
+                                <input type="text" placeholder="Option value" value="Option 1">
+                                <button class="remove-option">&times;</button>
+                            </div>
+                            <div class="option-item">
+                                <input type="text" placeholder="Option value" value="Option 2">
+                                <button class="remove-option">&times;</button>
+                            </div>
+                        </div>
+                        <button class="add-option" id="add-option">Add Option</button>
+                    </div>
+                    <div class="property-group">
+                        <h3>Validation</h3>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="field-required"> Required Field</label>
+                        </div>
+                    </div>
+                `,
                 html: `
                     <div class="property-group">
                         <h3>Basic Properties</h3>
@@ -772,8 +1085,52 @@ label.required:after {
                             <textarea id="field-html"><p>HTML Content</p></textarea>
                         </div>
                     </div>
+                `,
+                consent: `
+                    <div class="property-group">
+                        <h3>Basic Properties</h3>
+                        <div class="form-group">
+                            <label for="field-label">Label</label>
+                            <input type="text" id="field-label" value="I agree to the terms and conditions">
+                        </div>
+                        <div class="form-group">
+                            <label for="field-name">Field Name</label>
+                            <input type="text" id="field-name" value="consent">
+                        </div>
+                    </div>
+                    <div class="property-group">
+                        <h3>Validation</h3>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="field-required" checked> Required Field</label>
+                        </div>
+                    </div>
                 `
             };
+            
+            // Default properties template for field types without specific templates
+            propertiesTemplates.default = `
+                <div class="property-group">
+                    <h3>Basic Properties</h3>
+                    <div class="form-group">
+                        <label for="field-label">Label</label>
+                        <input type="text" id="field-label" value="Field">
+                    </div>
+                    <div class="form-group">
+                        <label for="field-name">Field Name</label>
+                        <input type="text" id="field-name" value="field">
+                    </div>
+                    <div class="form-group">
+                        <label for="field-placeholder">Placeholder</label>
+                        <input type="text" id="field-placeholder" value="">
+                    </div>
+                </div>
+                <div class="property-group">
+                    <h3>Validation</h3>
+                    <div class="form-group">
+                        <label><input type="checkbox" id="field-required"> Required Field</label>
+                    </div>
+                </div>
+            `;
             
             // Add drag and drop functionality to field types
             fieldTypes.forEach(fieldType => {
@@ -825,7 +1182,9 @@ label.required:after {
                     label: fieldType.charAt(0).toUpperCase() + fieldType.slice(1) + ' Field',
                     name: fieldType + '_field',
                     required: false,
-                    placeholder: 'Enter ' + fieldType
+                    placeholder: 'Enter ' + fieldType,
+                    options: fieldType === 'select' || fieldType === 'radio' || fieldType === 'multicheckbox' ? 
+                        ['Option 1', 'Option 2'] : []
                 };
                 
                 // Add event listeners to action buttons
@@ -849,6 +1208,30 @@ label.required:after {
                 
                 // Select the new field
                 selectField(fieldId, fieldType);
+            });
+            
+            // Add event listeners to existing fields
+            document.querySelectorAll('.preview-field').forEach(field => {
+                const fieldId = field.id;
+                const fieldType = field.getAttribute('data-type');
+                
+                field.querySelector('.remove-field').addEventListener('click', function() {
+                    field.remove();
+                    delete fieldsData[fieldId];
+                    
+                    if (previewContainer.querySelectorAll('.preview-field').length === 0) {
+                        showEmptyState();
+                    }
+                    if (currentField === fieldId) {
+                        showNoFieldSelected();
+                    }
+                });
+                
+                field.addEventListener('click', function(e) {
+                    if (!e.target.closest('.field-actions')) {
+                        selectField(fieldId, fieldType);
+                    }
+                });
             });
             
             // Function to show empty state
@@ -887,6 +1270,7 @@ label.required:after {
                 document.getElementById(fieldId).classList.add('selected');
                 
                 // Show properties for the selected field
+                const template = propertiesTemplates[fieldType] || propertiesTemplates.default;
                 propertiesContainer.innerHTML = `
                     <h2>Field Properties</h2>
                     <div class="property-group">
@@ -895,7 +1279,7 @@ label.required:after {
                             <span>${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)}</span>
                         </div>
                     </div>
-                    ${propertiesTemplates[fieldType] || propertiesTemplates.text}
+                    ${template}
                     <div class="property-group">
                         <h3>Advanced</h3>
                         <div class="form-group">
@@ -915,8 +1299,51 @@ label.required:after {
                     if (document.getElementById('field-name')) document.getElementById('field-name').value = data.name;
                     if (document.getElementById('field-placeholder')) document.getElementById('field-placeholder').value = data.placeholder;
                     if (document.getElementById('field-required')) document.getElementById('field-required').checked = data.required;
-                    if (document.getElementById('field-css')) document.getElementById('field-css').value = data.cssClass || '';
-                    if (document.getElementById('field-html') && data.htmlContent) document.getElementById('field-html').value = data.htmlContent;
+                    if (document.getElementById('field-html') && data.html) document.getElementById('field-html').value = data.html;
+                    if (document.getElementById('field-maxlength')) document.getElementById('field-maxlength').value = data.maxlength || '';
+                    if (document.getElementById('field-css')) document.getElementById('field-css').value = data.css_class || '';
+                    
+                    // Handle options for select, radio, and checkbox fields
+                    if ((fieldType === 'select' || fieldType === 'radio' || fieldType === 'multicheckbox') && data.options) {
+                        const optionsContainer = document.getElementById('options-container');
+                        optionsContainer.innerHTML = '';
+                        
+                        data.options.forEach(option => {
+                            const optionItem = document.createElement('div');
+                            optionItem.className = 'option-item';
+                            optionItem.innerHTML = `
+                                <input type="text" placeholder="Option value" value="${option}">
+                                <button class="remove-option">&times;</button>
+                            `;
+                            optionsContainer.appendChild(optionItem);
+                        });
+                        
+                        // Add event listeners to remove buttons
+                        optionsContainer.querySelectorAll('.remove-option').forEach(button => {
+                            button.addEventListener('click', function() {
+                                this.parentElement.remove();
+                            });
+                        });
+                    }
+                }
+                
+                // Add event listener for adding options
+                if (document.getElementById('add-option')) {
+                    document.getElementById('add-option').addEventListener('click', function() {
+                        const optionsContainer = document.getElementById('options-container');
+                        const optionItem = document.createElement('div');
+                        optionItem.className = 'option-item';
+                        optionItem.innerHTML = `
+                            <input type="text" placeholder="Option value">
+                            <button class="remove-option">&times;</button>
+                        `;
+                        optionsContainer.appendChild(optionItem);
+                        
+                        // Add event listener to remove button
+                        optionItem.querySelector('.remove-option').addEventListener('click', function() {
+                            optionItem.remove();
+                        });
+                    });
                 }
                 
                 // Add event listener to update button
@@ -933,10 +1360,25 @@ label.required:after {
                     name: document.getElementById('field-name') ? document.getElementById('field-name').value : '',
                     placeholder: document.getElementById('field-placeholder') ? document.getElementById('field-placeholder').value : '',
                     required: document.getElementById('field-required') ? document.getElementById('field-required').checked : false,
-                    value: document.getElementById('field-value') ? document.getElementById('field-value').value : '',
-                    cssClass: document.getElementById('field-css') ? document.getElementById('field-css').value : '',
-                    htmlContent: document.getElementById('field-html') ? document.getElementById('field-html').value : ''
+                    maxlength: document.getElementById('field-maxlength') ? document.getElementById('field-maxlength').value : '',
+                    css_class: document.getElementById('field-css') ? document.getElementById('field-css').value : ''
                 };
+                
+                // Handle HTML content
+                if (fieldType === 'html' && document.getElementById('field-html')) {
+                    fieldData.html = document.getElementById('field-html').value;
+                }
+                
+                // Handle options for select, radio, and checkbox fields
+                if (fieldType === 'select' || fieldType === 'radio' || fieldType === 'multicheckbox') {
+                    fieldData.options = [];
+                    const optionInputs = document.querySelectorAll('#options-container input');
+                    optionInputs.forEach(input => {
+                        if (input.value.trim() !== '') {
+                            fieldData.options.push(input.value);
+                        }
+                    });
+                }
                 
                 fieldsData[fieldId] = fieldData;
                 
@@ -950,20 +1392,104 @@ label.required:after {
                         <div class="form-field ${fieldData.required ? 'required' : ''}">
                             <label>${fieldData.label}</label>
                             <input type="${fieldType}" placeholder="${fieldData.placeholder}" 
-                                class="${fieldData.cssClass}">
+                                class="${fieldData.css_class}" ${fieldData.maxlength ? `maxlength="${fieldData.maxlength}"` : ''}>
                         </div>
                     `;
                 } else if (fieldType === 'textarea') {
                     newHtml = `
                         <div class="form-field ${fieldData.required ? 'required' : ''}">
                             <label>${fieldData.label}</label>
-                            <textarea placeholder="${fieldData.placeholder}" class="${fieldData.cssClass}"></textarea>
+                            <textarea placeholder="${fieldData.placeholder}" class="${fieldData.css_class}"></textarea>
+                        </div>
+                    `;
+                } else if (fieldType === 'select') {
+                    let optionsHtml = '<option value="">Select an option</option>';
+                    if (fieldData.options) {
+                        fieldData.options.forEach(option => {
+                            optionsHtml += `<option value="${option}">${option}</option>`;
+                        });
+                    }
+                    newHtml = `
+                        <div class="form-field ${fieldData.required ? 'required' : ''}">
+                            <label>${fieldData.label}</label>
+                            <select class="${fieldData.css_class}">
+                                ${optionsHtml}
+                            </select>
+                        </div>
+                    `;
+                } else if (fieldType === 'multiselect') {
+                    let optionsHtml = '';
+                    if (fieldData.options) {
+                        fieldData.options.forEach(option => {
+                            optionsHtml += `<option value="${option}">${option}</option>`;
+                        });
+                    }
+                    newHtml = `
+                        <div class="form-field ${fieldData.required ? 'required' : ''}">
+                            <label>${fieldData.label}</label>
+                            <select multiple class="${fieldData.css_class}">
+                                ${optionsHtml}
+                            </select>
+                        </div>
+                    `;
+                } else if (fieldType === 'radio') {
+                    let optionsHtml = '';
+                    if (fieldData.options) {
+                        fieldData.options.forEach(option => {
+                            optionsHtml += `
+                                <div class="radio-field">
+                                    <input type="radio" name="${fieldData.name}" value="${option}">
+                                    <label>${option}</label>
+                                </div>
+                            `;
+                        });
+                    }
+                    newHtml = `
+                        <div class="form-field ${fieldData.required ? 'required' : ''}">
+                            <label>${fieldData.label}</label>
+                            ${optionsHtml}
+                        </div>
+                    `;
+                } else if (fieldType === 'checkbox') {
+                    newHtml = `
+                        <div class="form-field ${fieldData.required ? 'required' : ''}">
+                            <div class="checkbox-field">
+                                <input type="checkbox" name="${fieldData.name}" class="${fieldData.css_class}">
+                                <label>${fieldData.label}</label>
+                            </div>
+                        </div>
+                    `;
+                } else if (fieldType === 'multicheckbox') {
+                    let optionsHtml = '';
+                    if (fieldData.options) {
+                        fieldData.options.forEach(option => {
+                            optionsHtml += `
+                                <div class="checkbox-field">
+                                    <input type="checkbox" name="${fieldData.name}[]" value="${option}">
+                                    <label>${option}</label>
+                                </div>
+                            `;
+                        });
+                    }
+                    newHtml = `
+                        <div class="form-field ${fieldData.required ? 'required' : ''}">
+                            <label>${fieldData.label}</label>
+                            ${optionsHtml}
                         </div>
                     `;
                 } else if (fieldType === 'html') {
                     newHtml = `
-                        <div class="form-field html-content ${fieldData.cssClass}">
-                            ${fieldData.htmlContent}
+                        <div class="form-field html-content ${fieldData.css_class}">
+                            ${fieldData.html || '<p>HTML Content</p>'}
+                        </div>
+                    `;
+                } else if (fieldType === 'consent') {
+                    newHtml = `
+                        <div class="form-field ${fieldData.required ? 'required' : ''}">
+                            <div class="checkbox-field">
+                                <input type="checkbox" name="${fieldData.name}" class="${fieldData.css_class}">
+                                <label>${fieldData.label}</label>
+                            </div>
                         </div>
                     `;
                 } else {
@@ -996,169 +1522,201 @@ label.required:after {
                     }
                 });
                 
-                showToast('Field updated successfully!');
+                alert('Field updated successfully!');
             }
             
-            // Function to show toast notification
-            function showToast(message) {
-                toastMessage.textContent = message;
-                toast.style.display = 'flex';
-                
-                setTimeout(() => {
-                    toast.style.display = 'none';
-                }, 3000);
+            // Function to generate form data for storage
+            function generateFormData() {
+                const formData = [];
+                for (const fieldId in fieldsData) {
+                    formData.push(fieldsData[fieldId]);
+                }
+                return formData;
             }
             
-            // Function to save form data to localStorage
-            function saveFormData() {
-                const formConfig = {
-                    orgId: orgId,
-                    orgName: orgName,
-                    fields: fieldsData,
-                    customCss: customCss,
-                    savedAt: new Date().toISOString()
-                };
+            // Function to display the form for users to fill out
+            function displayFormForUser(formData) {
+                let formHtml = `
+                    <div class="form-display-container">
+                        <div class="form-display">
+                            <h2>Contact Form</h2>
+                            <form id="user-form">
+                `;
                 
-                // Save to localStorage
-                localStorage.setItem(`formConfig_org_${orgId}`, JSON.stringify(formConfig));
-                
-                // Show success modal
-                successModal.style.display = 'flex';
-                formLink.href = `http://127.0.0.1:8000/form/?org_id=${orgId}`;
-            }
-            
-            // Function to load form data from localStorage
-            function loadFormData() {
-                const savedData = localStorage.getItem(`formConfig_org_${orgId}`);
-                
-                if (savedData) {
-                    const formConfig = JSON.parse(savedData);
-                    fieldsData = formConfig.fields || {};
-                    customCss = formConfig.customCss || '';
-                    
-                    // If there are saved fields, render them
-                    if (Object.keys(fieldsData).length > 0) {
-                        previewContainer.innerHTML = '<h3>Form Preview</h3>';
-                        
-                        for (const [fieldId, fieldData] of Object.entries(fieldsData)) {
-                            const fieldElement = document.createElement('div');
-                            fieldElement.className = 'preview-field';
-                            fieldElement.id = fieldId;
-                            fieldElement.setAttribute('data-type', fieldData.type);
-                            
-                            let fieldHtml = '';
-                            if (fieldData.type === 'text' || fieldData.type === 'email' || fieldData.type === 'number' || 
-                                fieldData.type === 'phone' || fieldData.type === 'url' || fieldData.type === 'date' || fieldData.type === 'time') {
-                                fieldHtml = `
-                                    <div class="form-field ${fieldData.required ? 'required' : ''}">
-                                        <label>${fieldData.label}</label>
-                                        <input type="${fieldData.type}" placeholder="${fieldData.placeholder}" 
-                                            class="${fieldData.cssClass || ''}">
-                                    </div>
-                                `;
-                            } else if (fieldData.type === 'textarea') {
-                                fieldHtml = `
-                                    <div class="form-field ${fieldData.required ? 'required' : ''}">
-                                        <label>${fieldData.label}</label>
-                                        <textarea placeholder="${fieldData.placeholder}" class="${fieldData.cssClass || ''}"></textarea>
-                                    </div>
-                                `;
-                            } else if (fieldData.type === 'html') {
-                                fieldHtml = `
-                                    <div class="form-field html-content ${fieldData.cssClass || ''}">
-                                        ${fieldData.htmlContent || '<p>HTML Content</p>'}
-                                    </div>
-                                `;
-                            } else {
-                                fieldHtml = fieldTemplates[fieldData.type] || '';
-                            }
-                            
-                            fieldElement.innerHTML = fieldHtml + `
-                                <div class="field-actions">
-                                    <button class="edit-field" title="Edit"><i class="fas fa-edit"></i></button>
-                                    <button class="remove-field" title="Remove"><i class="fas fa-trash"></i></button>
-                                </div>
-                            `;
-                            
-                            previewContainer.appendChild(fieldElement);
-                            
-                            // Add event listeners
-                            fieldElement.querySelector('.remove-field').addEventListener('click', function() {
-                                fieldElement.remove();
-                                delete fieldsData[fieldId];
-                                
-                                if (previewContainer.querySelectorAll('.preview-field').length === 0) {
-                                    showEmptyState();
-                                }
-                                if (currentField === fieldId) {
-                                    showNoFieldSelected();
-                                }
-                            });
-                            
-                            fieldElement.addEventListener('click', function(e) {
-                                if (!e.target.closest('.field-actions')) {
-                                    selectField(fieldId, fieldData.type);
-                                }
+                formData.forEach(field => {
+                    if (field.type === 'text' || field.type === 'email' || field.type === 'number' || 
+                        field.type === 'phone' || field.type === 'url' || field.type === 'date' || field.type === 'time') {
+                        formHtml += `
+                            <div class="form-field ${field.required ? 'required' : ''}">
+                                <label for="${field.name}">${field.label}</label>
+                                <input type="${field.type}" id="${field.name}" name="${field.name}" 
+                                    placeholder="${field.placeholder || ''}" 
+                                    ${field.required ? 'required' : ''}
+                                    ${field.maxlength ? `maxlength="${field.maxlength}"` : ''}>
+                            </div>
+                        `;
+                    } else if (field.type === 'textarea') {
+                        formHtml += `
+                            <div class="form-field ${field.required ? 'required' : ''}">
+                                <label for="${field.name}">${field.label}</label>
+                                <textarea id="${field.name}" name="${field.name}" 
+                                    placeholder="${field.placeholder || ''}" 
+                                    ${field.required ? 'required' : ''}></textarea>
+                            </div>
+                        `;
+                    } else if (field.type === 'select') {
+                        let optionsHtml = '<option value="">Select an option</option>';
+                        if (field.options) {
+                            field.options.forEach(option => {
+                                optionsHtml += `<option value="${option}">${option}</option>`;
                             });
                         }
+                        formHtml += `
+                            <div class="form-field ${field.required ? 'required' : ''}">
+                                <label for="${field.name}">${field.label}</label>
+                                <select id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}>
+                                    ${optionsHtml}
+                                </select>
+                            </div>
+                        `;
+                    } else if (field.type === 'multiselect') {
+                        let optionsHtml = '';
+                        if (field.options) {
+                            field.options.forEach(option => {
+                                optionsHtml += `<option value="${option}">${option}</option>`;
+                            });
+                        }
+                        formHtml += `
+                            <div class="form-field ${field.required ? 'required' : ''}">
+                                <label for="${field.name}">${field.label}</label>
+                                <select multiple id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}>
+                                    ${optionsHtml}
+                                </select>
+                            </div>
+                        `;
+                    } else if (field.type === 'radio') {
+                        let optionsHtml = '';
+                        if (field.options) {
+                            field.options.forEach(option => {
+                                optionsHtml += `
+                                    <div class="radio-field">
+                                        <input type="radio" id="${field.name}_${option}" name="${field.name}" value="${option}">
+                                        <label for="${field.name}_${option}">${option}</label>
+                                    </div>
+                                `;
+                            });
+                        }
+                        formHtml += `
+                            <div class="form-field ${field.required ? 'required' : ''}">
+                                <label>${field.label}</label>
+                                ${optionsHtml}
+                            </div>
+                        `;
+                    } else if (field.type === 'checkbox') {
+                        formHtml += `
+                            <div class="form-field ${field.required ? 'required' : ''}">
+                                <div class="checkbox-field">
+                                    <input type="checkbox" id="${field.name}" name="${field.name}" value="true" ${field.required ? 'required' : ''}>
+                                    <label for="${field.name}">${field.label}</label>
+                                </div>
+                            </div>
+                        `;
+                    } else if (field.type === 'multicheckbox') {
+                        let optionsHtml = '';
+                        if (field.options) {
+                            field.options.forEach(option => {
+                                optionsHtml += `
+                                    <div class="checkbox-field">
+                                        <input type="checkbox" id="${field.name}_${option}" name="${field.name}[]" value="${option}">
+                                        <label for="${field.name}_${option}">${option}</label>
+                                    </div>
+                                `;
+                            });
+                        }
+                        formHtml += `
+                            <div class="form-field ${field.required ? 'required' : ''}">
+                                <label>${field.label}</label>
+                                ${optionsHtml}
+                            </div>
+                        `;
+                    } else if (field.type === 'html') {
+                        formHtml += `
+                            <div class="html-content">
+                                ${field.html || ''}
+                            </div>
+                        `;
+                    } else if (field.type === 'consent') {
+                        formHtml += `
+                            <div class="form-field ${field.required ? 'required' : ''}">
+                                <div class="checkbox-field">
+                                    <input type="checkbox" id="${field.name}" name="${field.name}" value="true" ${field.required ? 'required' : ''}>
+                                    <label for="${field.name}">${field.label}</label>
+                                </div>
+                            </div>
+                        `;
                     }
-                    
-                    showToast('Form data loaded successfully!');
-                }
+                });
+                
+                formHtml += `
+                                <button type="submit" class="submit-btn">Submit Form</button>
+                            </form>
+                        </div>
+                    </div>
+                `;
+                
+                return formHtml;
             }
             
             // Initialize buttons
-            previewBtn.addEventListener('click', function() {
-                // In a real application, this would open a preview window
-                window.open(`http://127.0.0.1:8000/form/?org_id=${orgId}`, '_blank');
+            document.getElementById('preview-btn').addEventListener('click', function() {
+                const formData = generateFormData();
+                previewFormContainer.innerHTML = displayFormForUser(formData);
+                
+                // Add event listener to the form
+                const userForm = previewFormContainer.querySelector('#user-form');
+                if (userForm) {
+                    userForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        
+                        // Show success message
+                        previewFormContainer.innerHTML = `
+                            <div class="success-message">
+                                <i class="fas fa-check-circle"></i>
+                                <h2>Form Submitted Successfully!</h2>
+                                <p>Thank you for your submission.</p>
+                            </div>
+                        `;
+                    });
+                }
+                
+                previewModal.style.display = 'flex';
             });
             
-            cssBtn.addEventListener('click', function() {
-                document.getElementById('custom-css').value = customCss;
-                cssModal.style.display = 'flex';
+            document.getElementById('save-btn').addEventListener('click', function() {
+                const formData = generateFormData();
+                formFieldsInput.value = JSON.stringify(formData);
+                saveForm.submit();
             });
             
-            cssClose.addEventListener('click', function() {
-                cssModal.style.display = 'none';
-            });
-            
-            saveCssBtn.addEventListener('click', function() {
-                customCss = document.getElementById('custom-css').value;
-                cssModal.style.display = 'none';
-                showToast('CSS saved successfully!');
-            });
-            
-            saveBtn.addEventListener('click', function() {
-                saveFormData();
-            });
-            
-            successClose.addEventListener('click', function() {
-                successModal.style.display = 'none';
-            });
-            
-            copyLinkBtn.addEventListener('click', function() {
-                navigator.clipboard.writeText(`http://127.0.0.1:8000/form/?org_id=${orgId}`);
-                showToast('Link copied to clipboard!');
-            });
-            
-            viewFormBtn.addEventListener('click', function() {
-                window.open(`http://127.0.0.1:8000/form/?org_id=${orgId}`, '_blank');
+            // Close modals when clicking close button
+            modalCloseButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.closest('.modal').style.display = 'none';
+                });
             });
             
             // Close modals when clicking outside
             window.addEventListener('click', function(e) {
-                if (e.target === cssModal) {
-                    cssModal.style.display = 'none';
-                }
-                if (e.target === successModal) {
-                    successModal.style.display = 'none';
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
                 }
             });
             
             // Initialize
-            showEmptyState();
+            if (previewContainer.querySelectorAll('.preview-field').length === 0) {
+                showEmptyState();
+            }
             showNoFieldSelected();
-            loadFormData();
         });
     </script>
 </body>

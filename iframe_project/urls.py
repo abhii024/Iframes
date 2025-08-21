@@ -36,6 +36,17 @@ Including another URLconf
 #     path("edit-organization/", views.edit_organization, name="edit_organization"),
     
 # ]
+# from django.urls import path
+# from iframe_form import views
+
+# urlpatterns = [
+#     path('', views.organization_list, name='organization_list'),
+#     path('create/', views.create_organization, name='create_organization'),
+#     path('edit/<int:org_id>/', views.edit_organization, name='edit_organization'),
+#     path('form/', views.contact_form, name='contact_form'),
+#     path('success/', views.contact_success, name='contact_success'),
+# ]
+
 from django.urls import path
 from iframe_form import views
 
