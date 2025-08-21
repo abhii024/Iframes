@@ -19,24 +19,42 @@ def contact_form(request):
 
     organization = get_object_or_404(Organization, id=org_id)
     captcha_error = None
+    form_submitted = False
+    success_message = None
 
     if request.method == "POST":
         form = DynamicContactForm(request.POST, organization=organization)
         
-        # Verify hCaptcha
-        captcha_token = request.POST.get('h-captcha-response')
-        if not captcha_token:
-            captcha_error = "Please complete the CAPTCHA verification"
-        elif not verify_hcaptcha(captcha_token):
-            captcha_error = "Invalid CAPTCHA. Please try again."
-        
-        if not captcha_error and form.is_valid():
-            submission = form.save()
-            return render(request, "iframe_form/success.html", {
-                "organization": organization
-            })
-        else:
-            print("Form errors:", form.errors)
+        if form.is_valid():
+            try:
+                # Save the form data to ContactSubmission model
+                submission = ContactSubmission(
+                    organization=organization,
+                    form_data=form.cleaned_data,
+                    # You might want to add additional fields like:
+                    # ip_address=request.META.get('REMOTE_ADDR'),
+                    # user_agent=request.META.get('HTTP_USER_AGENT'),
+                )
+                submission.save()
+                
+                form_submitted = True
+                success_message = organization.success_message or "Thank you for your submission!"
+                
+                # If it's an AJAX request, return JSON response
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({
+                        'success': True,
+                        'message': success_message
+                    })
+                
+            except Exception as e:
+                # Log the error for debugging
+                print(f"Error saving contact submission: {e}")
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({
+                        'success': False,
+                        'message': 'An error occurred while saving your submission.'
+                    }, status=500)
     else:
         form = DynamicContactForm(organization=organization)
     
@@ -47,13 +65,22 @@ def contact_form(request):
             if field.get('type') == 'html':
                 html_fields.append(field.get('name'))
     
+    # If form was successfully submitted and it's not AJAX, show success message
+    if form_submitted and not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, "iframe_form/success.html", {
+            "organization": organization,
+            "success_message": success_message
+        })
+    print(f"form_style: {organization.form_style}")
     return render(request, "iframe_form/show_form.html", {
         "organization": organization,
         "form": form,
         "html_fields": html_fields,
         "custom_css": organization.form_style,
-        "HCAPTCHA_SITEKEY": settings.HCAPTCHA_SITEKEY,
-        "captcha_error": captcha_error
+        "form_submitted": form_submitted,
+        "success_message": success_message,
+        # "HCAPTCHA_SITEKEY": settings.HCAPTCHA_SITEKEY,
+        # "captcha_error": captcha_error
     })
 
 def verify_hcaptcha(token):
@@ -100,7 +127,6 @@ def edit_organization(request, org_id):
                 'form_style': organization.form_style
             })
         return redirect('edit_organization', org_id=org_id)
-
     context = {
         "organization": organization,
         "field_types": Organization.FIELD_TYPES

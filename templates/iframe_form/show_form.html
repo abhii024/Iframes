@@ -116,11 +116,6 @@
         margin-top: 5px;
     }
     
-    /* Hide hCaptcha badge */
-    .h-captcha {
-        margin-bottom: 20px;
-    }
-    
     /* Responsive adjustments */
     @media (max-width: 600px) {
         body {
@@ -135,17 +130,9 @@
     /* Custom CSS - will override default styles if present */
     {{ custom_css|safe }}
     </style>
-    <!-- Load ONLY hCaptcha API -->
-    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 </head>
 <body>
     <h1>{{ organization.name }} Contact Form</h1>
-    
-    {% if captcha_error %}
-        <div class="error-message">
-            {{ captcha_error }}
-        </div>
-    {% endif %}
 
     {% if form.fields|length > 1 %}
         <form method="POST" id="contactForm">
@@ -185,12 +172,6 @@
                     </div>
                 {% endif %}
             {% endfor %}
-            
-            <!-- hCaptcha field -->
-            <div class="h-captcha" data-sitekey="{{ HCAPTCHA_SITEKEY }}"></div>
-            {% if captcha_error %}
-                <div class="error">{{ captcha_error }}</div>
-            {% endif %}
             
             <button type="submit">Submit</button>
         </form>

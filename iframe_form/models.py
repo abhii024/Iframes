@@ -2,23 +2,23 @@ from django.db import models
 from django.db.models import JSONField
 
 class Organization(models.Model):
-    FIELD_TYPES = (
-        ('text', 'Text'),
-        ('email', 'Email'),
-        ('number', 'Number'),
-        ('phone', 'Phone'),
-        ('textarea', 'Text Area'),
-        ('select', 'Select Dropdown'),
-        ('multiselect', 'Multi Select Dropdown'),
-        ('radio', 'Radio Buttons'),
-        ('checkbox', 'Checkbox'),
-        ('multicheckbox', 'Multi Checkbox'),
-        ('date', 'Date'),
-        ('time', 'Time'),
-        ('url', 'Website URL'),
-        ('html', 'HTML Content'),
-        ('consent', 'Consent Checkbox'),
-    )
+    FIELD_TYPES = {
+        "text": {"icon": "fas fa-font", "label": "Text"},
+        "email": {"icon": "fas fa-envelope", "label": "Email"},
+        "number": {"icon": "fas fa-hashtag", "label": "Number"},
+        "phone": {"icon": "fas fa-phone", "label": "Phone"},
+        "textarea": {"icon": "fas fa-align-left", "label": "Text Area"},
+        "select": {"icon": "fas fa-caret-down", "label": "Dropdown"},
+        "multiselect": {"icon": "fas fa-bars", "label": "Multi Select"},
+        "radio": {"icon": "fas fa-dot-circle", "label": "Radio Buttons"},
+        "checkbox": {"icon": "fas fa-check-square", "label": "Checkbox"},
+        "multicheckbox": {"icon": "fas fa-tasks", "label": "Multi Checkbox"},
+        "date": {"icon": "fas fa-calendar", "label": "Date"},
+        "time": {"icon": "fas fa-clock", "label": "Time"},
+        "url": {"icon": "fas fa-link", "label": "Website URL"},
+        "html": {"icon": "fas fa-code", "label": "HTML Content"},
+        "consent": {"icon": "fas fa-check-circle", "label": "Consent"},
+    }
     
     name = models.CharField(max_length=255)
     form_fields = JSONField(default=list)  # Stores field configurations
